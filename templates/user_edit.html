@@ -1,0 +1,100 @@
+{% extends 'design.html' %}
+
+{% block head %}
+<style>
+    body{
+    height:100vh
+}
+.sidebar {
+    height: 100%;
+    width: 10%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    
+    
+    }
+    
+.sidebar div {
+padding: 8px;
+
+color:#828e96
+}
+.sidebar div a{
+    padding: 8px;
+    text-decoration: none;
+    display: block;
+    color:#828e96
+    }
+.hvr:hover{
+    background-color: #263949;
+    color:white;
+    cursor: pointer;
+}
+
+.new{
+    height:26px;
+    width: 100px;
+    background-color:#1f8772;
+    color:white;
+    border:none;
+}
+</style>
+    <title>Edit</title>
+{% endblock %}
+{% block body %}
+    <div class='ps-3 pt-3'style=" margin-left:10%;">
+        <div style="font-size:36px; font-weight:150;color:#5e5e5e;">Edit</div>
+        <div style='font-size:20px;font-weight:600 ;padding-bottom:10px'>User: {{user.user_name}} {{user.user_surname}}</div>
+    </div>
+    <div style="margin-left:10%; height:1px;background-color:lightgray"></div>
+    <div class="mt-4">
+        <div style="font-size:36px; font-weight:150;color:#5e5e5e;" class="text-center">Edit User</div>
+        <form class="d-flex justify-content-center flex-column align-items-center" action='/users/{{user.user_number}}/update' method="POST">
+            <div>
+                <div>
+                    <div class="input-group mb-3 p-2">
+                        <span style='background-color:#1f8772;width:120px;; color:white' class="input-group-text" id="inputGroup-sizing-default">Name</span>
+                        <input name='user_name' type="text" class="form-control" value='{{user.user_name}}' aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                    </div>
+                </div>
+                <div>
+                    <div class="input-group mb-3 p-2">
+                        <span style='background-color:#1f8772;width:120px;; color:white' class="input-group-text" id="inputGroup-sizing-default">Surname</span>
+                        <input name='user_surname'type="text" class="form-control" value='{{user.user_surname}}' aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                    </div>
+                </div>
+                <div>
+                    <div class="input-group mb-3 p-2">
+                        <span style='background-color:#1f8772; width:120px;; color:white' class="input-group-text" id="inputGroup-sizing-default">Number</span>
+                        <input name='user_number' type="number" class="form-control" value='{{user.user_number}}' aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                    </div>
+                </div>
+                <div>
+                    <div class="input-group mb-3 p-2">
+                        <span style='background-color:#1f8772; width:120px; color:white' class="input-group-text" id="inputGroup-sizing-default">Mail</span>
+                        <input  name='user_email' type="text" class="form-control" value='{{user.user_email}}' aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                    </div>
+                </div> 
+                <div>
+                    <div class="input-group mb-3 p-2">
+                        <span style='background-color:#1f8772; width:120px; color:white' class="input-group-text" id="inputGroup-sizing-default">Password</span>
+                        <input  name='user_password' type="password" class="form-control" value='{{user.user_password}}' aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                    </div>
+                </div> 
+                <div class="input-group mb-3 p-2">
+                    <select class="form-select w-75 mb-3 p-2" name="user_role">
+                    <option selected enabled value="{{user.user_role}}">{{user.user_role}}</option>
+                    {% for role in roles %}
+                    <option value="{{role.role_name}}">{{role.role_name}}</option>
+                    {% endfor %}
+                    </select>
+                </div>
+            </div>  
+            <div class="px-2 d-flex justify-content-center align-items-center">
+                <button style='height:38px' type="submit" class="new rounded ">Save</button>
+            </div>
+        </form>
+    
+    </div>
+{% endblock %}

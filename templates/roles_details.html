@@ -1,0 +1,73 @@
+{% extends 'design.html' %}
+
+{% block head %}
+<style>body{
+    height:100vh
+}
+.sidebar {
+    height: 100%;
+    width: 10%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    
+    
+    }
+    
+.sidebar div {
+padding: 8px;
+
+color:#828e96
+}
+.sidebar div a{
+    padding: 8px;
+    text-decoration: none;
+    display: block;
+    color:#828e96
+    }
+.hvr:hover{
+    background-color: #263949;
+    color:white;
+    cursor: pointer;
+}
+
+.new{
+    height:26px;
+    width: 100px;
+    background-color:#1f8772;
+    color:white;
+    border:none;
+}</style>
+    <title>Details</title>
+{% endblock %}
+
+{% block body %}
+    <div class='ps-3 pt-3'style=" margin-left:10%;">
+        <div style="font-size:36px; font-weight:150;color:#5e5e5e;">Details</div>
+        <div style='font-size:20px;font-weight:600 ;padding-bottom:10px'>Role: {{role.role_name}}</div>
+    </div>
+    <div style="margin-left:10%; height:1px;background-color:lightgray"></div>
+    <div  class='ps-3 pt-3'style=" margin-left:10%;height:100%">
+        <div class="container">
+            <div class="row">
+                <div style='font-weight:600' class="col-1 lead">#</div>
+                <div style='font-weight:600' class="col-2 lead">Name</div>
+                <div style='font-weight:600' class="col-2 lead">Surname</div>
+                <div style='font-weight:600' class="col-2 lead">Number</div>
+                <div style='font-weight:600' class="col-2 lead">Mail Adress</div>
+            </div>
+            <div class='' style=" height:2px;background-color:black"></div>
+            {% for user in users %}
+            <div class="row mt-3">
+                <div class="col-1 lead">{{loop.index}}</div>
+                <div class="col-2 lead">{{user.user_name}}</div>
+                <div class="col-2 lead">{{user.user_surname}}</div>
+                <div class="col-2 lead">{{user.user_number}}</div>
+                <div class="col-2 lead">{{user.user_email}}</div>
+                
+            </div>
+            {% endfor %}
+        </div>
+    </div >
+    
+{% endblock %}

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href='../static/main.css' rel='stylesheet'>
+    {% block head %}
+        
+    {% endblock %}
+</head>
+<body>
+    <div class="sidebar">
+        <div class='d-flex align-items-center' style='background-color:#263949; height:110px;'>
+            <div style="color:#929ea5;font-weight:450;text-align: center;font-size:1.3vw;display: inline-block;word-break: break-word;">{{session['user_email']}}</div>
+        </div>
+        
+        <div style="background-color: #2f4050;height:100%">
+            <a href='#'class="hvr">Dashboard</a>
+            <a href='/courses' class="hvr">Courses</a>
+            <a href='/exams'class="hvr">Exams</a>
+            <a href='/questions'class="hvr">Questions</a>
+            <a href='/users' class="hvr">Users</a>
+            <a href='/roles' class="hvr">Roles</a>
+        </div>
+        
+    </div>
+    <form method="GET" action="{{ url_for('logout') }}">
+    <button type="submit" style="float:right;color:#ffffff;font-weight:600;margin-right:5%;" class="mt-4 btn btn-danger">Logout</button>
+    </form>
+    {% block body%}
+            
+    {% endblock %}
+</body>
+</html>

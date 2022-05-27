@@ -1,0 +1,101 @@
+{% extends 'design.html' %}
+
+{% block head %}
+<style>body{
+    height:100vh
+}
+.sidebar {
+    height: 100%;
+    width: 10%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    
+    
+    }
+    
+.sidebar div {
+padding: 8px;
+
+color:#828e96
+}
+.sidebar div a{
+    padding: 8px;
+    text-decoration: none;
+    display: block;
+    color:#828e96
+    }
+.hvr:hover{
+    background-color: #263949;
+    color:white;
+    cursor: pointer;
+}
+
+.new{
+    height:26px;
+    width: 100px;
+    background-color:#1f8772;
+    color:white;
+    border:none;
+}
+</style>
+    <title>Question Edit</title>
+{% endblock %}
+
+{% block body %}
+    <div class='ps-3 pt-3'style=" margin-left:10%;">
+        <div style="font-size:36px; font-weight:150;color:#5e5e5e;">Question Edit</div>
+        <div style='font-size:20px;font-weight:600 ;padding-bottom:10px'>Question: {{question.question_id}} </div>
+    </div>
+    <div style="margin-left:10%; height:1px;background-color:lightgray"></div>
+    <div class="mt-2" style="position: relative;">
+        <div style="font-size:36px; font-weight:150;color:#5e5e5e;" class="text-center">Edit</div>
+        <form class="d-flex justify-content-center flex-column align-items-center" action='/question/{{question.question_id}}/update' method="POST">
+            <div>
+                <div>
+                    <input type="hidden" value="{{question.question_id}}" name="o_number">
+                </div>
+                <div class="input-group mb-3 p-2">
+                    <span style='background-color:#1f8772;width:120px;; color:white' class="input-group-text" id="inputGroup-sizing-default">Exam</span>
+                    <select class="form-select w-25  p-2" name="exam"  onclick="onlyOne(this)">
+                    <option selected enabled value="{{question.exam}}">{{question.exam}}</option>
+                    {% for exm in exams %}
+                        <option value="{{exm.exam_course}}">{{exm.exam_course}}</option>
+                    {% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <div class="input-group mb-3 p-2">
+                        <span style='background-color:#1f8772;width:120px;; color:white' class="input-group-text" id="inputGroup-sizing-default">Question</span>
+                        <input name='question'type="text" class="form-control" value='{{question.question}}' aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                    </div>
+                </div>
+                <div>
+                    <div class="input-group mb-3 p-2">
+                        <span style='background-color:#1f8772; width:120px;; color:white' class="input-group-text" id="inputGroup-sizing-default">Answer</span>
+                        <input name='answer' type="text" class="form-control" value='{{question.answer}}' aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                    </div>
+                </div>
+                <div>
+                    <div class="input-group mb-3 p-2">
+                        <span style='background-color:#1f8772; width:120px;; color:white' class="input-group-text" id="inputGroup-sizing-default">Other Answer</span>
+                        <input name='alternative_answer' type="text" class="form-control" value='{{question.alternative_answer}}' aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                    </div>
+                </div>
+                <div>
+                    <div class="input-group mb-3 p-2">
+                        <span style='background-color:#1f8772; width:120px;; color:white' class="input-group-text" id="inputGroup-sizing-default">Score</span>
+                        <input name='question_score' type="text" class="form-control" value='{{question.question_score}}' aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                    </div>
+                </div>
+            </div>  
+            <div class="px-2 d-flex justify-content-center align-items-center">
+                <button style='height:38px' type="submit" class="new rounded ">Save</button>
+            </div>
+            <a href="/questions"> <button onclick='off()' style='background-color:red' class="new rounded">Close</button></a>
+            </div>
+        </form>
+        
+        </div>
+    </div>
+{% endblock %}
