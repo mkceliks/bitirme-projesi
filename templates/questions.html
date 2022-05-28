@@ -1,4 +1,13 @@
 {% extends 'design.html' %} {% block head %}
+<style>
+    .word {
+    cursor: pointer;
+  }
+  
+.selected {
+    background-color: palegreen;
+  }
+</style>
 <script>
     function newform() {
         document.getElementById("newform").style.display = 'block';
@@ -19,7 +28,31 @@
     document.getElementById('answer_2').style.display = 'block'
         
     }
-          </script>
+    function render_text() {
+    const example = document.getElementById('content').value;
+    document.getElementById('mark_div').style.display = 'block'
+    
+    const words = example.split(" ");
+
+document.getElementById('mark').innerHTML = words.reduce((acc, word) => {
+  return `${acc}  
+      <option "class="word">${word}</option>`;
+}, '');
+const elements = document.getElementsByClassName('word');
+
+[...elements].forEach((element) => {
+  element.addEventListener('click', () => {
+    element.classList.toggle('selected');
+  })
+});
+}
+</script>
+
+<script>
+
+
+</script>
+
 <title>Questions</title>
 {% endblock %}
 
@@ -58,18 +91,24 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div>
+                                <div> 
                                     <div class="input-group mb-3 p-2">
                                         <span style='background-color:#1f8772;width:120px;; color:white' class="input-group-text" id="inputGroup-sizing-default">Question</span>
-                                        <input name='question' type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                                        <input style="width:170px;" id="content" name='question' type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                                        <a  class="btn btn-danger btn-xs" href="#mark" onclick="render_text()">+</a>
                                     </div>
                                 </div>
-                                <div>
+                                <div style="display: none;" name="mark"  id="mark_div">
+                                    <select id="mark" class="form-control" name="answer">
+
+                                    </select>
+                                </div>
+                                <!-- <div>
                                     <div class="input-group mb-3 p-2">
                                         <span style='background-color:#1f8772; width:120px; color:white' class="input-group-text" id="inputGroup-sizing-default">Answer</span>
                                         <input name='answer' type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
                                     </div>
-                                </div>
+                                </div> -->
                             </div>
                             <div>
                                 <div class="input-group mb-3 p-2">
