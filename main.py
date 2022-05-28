@@ -133,7 +133,8 @@ class Question(db.Document):
     exam = db.StringField()
     question = db.StringField()
     answer = db.StringField()
-    alternative_answer = db.StringField()
+    alternative_answer1 = db.StringField()
+    alternative_answer2 = db.StringField()
     question_score=db.IntField()
     
     
@@ -143,7 +144,8 @@ class Question(db.Document):
                 "exam" : self.exam,
                 "question" : self.question,
                 "answer" : self.answer,
-                "alternative_answer" : self.alternative_answer,
+                "alternative_answer1" : self.alternative_answer1,
+                "alternative_answer2" : self.alternative_answer2,
                 "question_score" : self.question_score
             }
     
@@ -163,7 +165,7 @@ def api_questions():
     elif request.method == "POST":
         content = request.form
         question = Question(question_id=str(uuid4()), exam =content['exam'], 
-                            question=content['question'],answer=content['answer'],alternative_answer=content['alternative_answer'],question_score=content['question_score'])
+                            question=content['question'],answer=content['answer'],alternative_answer1=content['alternative_answer1'],alternative_answer2=content['alternative_answer2'],question_score=content['question_score'])
         question.save()
         return redirect(request.referrer)
      
@@ -200,7 +202,8 @@ def api_each_question(question_id):
         updated_question.exam = content['exam']
         updated_question.question = content['question']
         updated_question.answer = content['answer']
-        updated_question.alternative_answer = content['alternative_answer']
+        updated_question.alternative_answer1 = content['alternative_answer1']
+        updated_question.alternative_answer2 = content['alternative_answer2']
         updated_question.question_score = content['question_score']
         updated_question.save()
         return redirect('/questions')

@@ -14,15 +14,10 @@
     }
 </script>
 <script>
-    function onlyOne(checkbox) {
+    function open_Answer_2() {
 
-        var close = document.getElementById('select')
-        if ( checkbox.value == 'Researcher' ){
-          close.style.display = 'none';
-        }
-        else{
-          close.style.display = 'block';
-        }
+    document.getElementById('answer_2').style.display = 'block'
+        
     }
           </script>
 <title>Questions</title>
@@ -79,7 +74,14 @@
                             <div>
                                 <div class="input-group mb-3 p-2">
                                     <span style='background-color:#1f8772; width:120px;; color:white' class="input-group-text" id="inputGroup-sizing-default">Other Answer</span>
-                                    <input name='alternative_answer' type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                                    <input style="width:170px;" name='alternative_answer1' type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                                    <a  class="btn btn-danger btn-xs" href="#answer_2" onclick="open_Answer_2()">+</a>
+                                </div>
+                            </div>
+                            <div style="display: none;" id="answer_2">
+                                <div class="input-group mb-3 p-2">
+                                    <span style='background-color:#1f8772; width:120px;; color:white' class="input-group-text" id="inputGroup-sizing-default">Other Answer</span>
+                                    <input name='alternative_answer2' type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
                                 </div>
                             </div>
                             <div>
