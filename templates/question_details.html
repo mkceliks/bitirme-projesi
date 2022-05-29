@@ -68,7 +68,7 @@ color:#828e96
                             <div class="col-sm">Exam</div>
                             <div class="col-sm">Question</div>
                             <div class="col-sm">Answer</div>
-                            <div class="col-sm">Other Answer</div>
+                            <div class="col-sm">Other Answers</div>
                             <div class="col-sm">Score</div>
                             <div class="col-sm"></div>
                         </div>
@@ -79,7 +79,7 @@ color:#828e96
                             <div class="col pt-2">{{question.exam}}</div>
                             <div class="col pt-2">{{question.question}}</div>
                             <div class="col pt-2">{{question.answer}}</div>
-                            <div class="col pt-2">{{question.alternative_answer}}</div>
+                            <div class="col pt-2">{{question.alternative_answer1}} {{question.alternative_answer2}}</div>
                             <div class="col pt-2">{{question.question_score}}</div>
                             <div class="col pt-2 d-flex justify-content-end">
                                 <form action="/question/{{question.question_id}}/update" method="GET">

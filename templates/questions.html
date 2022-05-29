@@ -26,8 +26,16 @@
     function open_Answer_2() {
 
     document.getElementById('answer_2').style.display = 'block'
+    document.getElementById('add_button').style.display = 'none'
+    document.getElementById('add_input').style.display = 'width:250px'
         
     }
+    function close_Answer_2() {
+
+        document.getElementById('answer_2').style.display = 'none'
+        document.getElementById('add_button').style.display = 'block'
+            
+        }
     function render_text() {
     const example = document.getElementById('content').value;
     document.getElementById('mark_div').style.display = 'block'
@@ -99,6 +107,7 @@ const elements = document.getElementsByClassName('word');
                                     </div>
                                 </div>
                                 <div style="display: none;" name="mark"  id="mark_div">
+                                    <span style='background-color:#1f8772;width:120px;; color:white' class="input-group-text" id="inputGroup-sizing-default">Answer</span>
                                     <select id="mark" class="form-control" name="answer">
 
                                     </select>
@@ -113,14 +122,15 @@ const elements = document.getElementsByClassName('word');
                             <div>
                                 <div class="input-group mb-3 p-2">
                                     <span style='background-color:#1f8772; width:120px;; color:white' class="input-group-text" id="inputGroup-sizing-default">Other Answer</span>
-                                    <input style="width:170px;" name='alternative_answer1' type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
-                                    <a  class="btn btn-danger btn-xs" href="#answer_2" onclick="open_Answer_2()">+</a>
+                                    <input id="add_input" style="width:170px;" name='alternative_answer1' type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                                    <a  id="add_button" class="btn btn-danger btn-xs" href="#answer_2" onclick="open_Answer_2()">+</a>
                                 </div>
                             </div>
                             <div style="display: none;" id="answer_2">
                                 <div class="input-group mb-3 p-2">
                                     <span style='background-color:#1f8772; width:120px;; color:white' class="input-group-text" id="inputGroup-sizing-default">Other Answer</span>
-                                    <input name='alternative_answer2' type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                                    <input style="width:170px;" name='alternative_answer2' type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                                    <a  class="btn btn-danger btn-xs" href="#answer_2" onclick="close_Answer_2()">-</a>
                                 </div>
                             </div>
                             <div>

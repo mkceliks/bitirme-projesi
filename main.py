@@ -164,8 +164,11 @@ def api_questions():
         return render_template("questions.html",questions= questions,exams=exams)
     elif request.method == "POST":
         content = request.form
+        sentence=content['question']
+        taking_answer=content['answer']
+        sentence=sentence.replace(taking_answer,'______')
         question = Question(question_id=str(uuid4()), exam =content['exam'], 
-                            question=content['question'],answer=content['answer'],alternative_answer1=content['alternative_answer1'],alternative_answer2=content['alternative_answer2'],question_score=content['question_score'])
+                            question=sentence,answer=content['answer'],alternative_answer1=content['alternative_answer1'],alternative_answer2=content['alternative_answer2'],question_score=content['question_score'])
         question.save()
         return redirect(request.referrer)
      
@@ -182,6 +185,10 @@ def delete_func(question_id):
 def question_details_func(question_id):
     if request.method == "GET": 
         question= Question.objects(question_id=question_id).first()
+        sentence=question.question
+        answer=question.answer
+        sentence=sentence.replace('______',answer)
+        question.question=sentence
         return render_template("question_details.html",question=question)
         
 
@@ -194,13 +201,20 @@ def api_each_question(question_id):
         for exam in Exam.objects:
             exams.append(exam)
         question= Question.objects(question_id=question_id).first()
+        sentence=question.question
+        answer=question.answer
+        sentence=sentence.replace('______',answer)
+        question.question=sentence
         return render_template("question_edit.html",question=question,exams=exams)
     
     elif request.method == "POST":
         content = request.form
+        sentence=content['question']
+        taking_answer=content['answer']
+        sentence=sentence.replace(taking_answer,'______')
         updated_question= Question.objects(question_id=question_id).first()
         updated_question.exam = content['exam']
-        updated_question.question = content['question']
+        updated_question.question = sentence
         updated_question.answer = content['answer']
         updated_question.alternative_answer1 = content['alternative_answer1']
         updated_question.alternative_answer2 = content['alternative_answer2']

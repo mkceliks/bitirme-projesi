@@ -39,6 +39,55 @@ color:#828e96
     border:none;
 }
 </style>
+<script>
+    function newform() {
+        document.getElementById("newform").style.display = 'block';
+    }
+
+    function off() {
+        document.getElementById("newform").style.display = 'none';
+    }
+
+    function details() {
+        let value
+        document.getElementById("newform").style.display = 'block';
+    }
+</script>
+<script>
+    function open_Answer_2() {
+
+    document.getElementById('answer_2').style.display = 'block'
+    document.getElementById('add_button').style.display = 'none'
+    document.getElementById('add_input').style.display = '250px'
+        
+    }
+    function close_Answer_2() {
+
+        document.getElementById('answer_2').style.display = 'none'
+        document.getElementById('add_button').style.display = 'block'
+        document.getElementById('input_answer2').value = ''
+            
+        }
+    function render_text() {
+    const example = document.getElementById('content').value;
+    document.getElementById('mark_div').style.display = 'block'
+    
+    const words = example.split(" ");
+
+document.getElementById('mark').innerHTML = words.reduce((acc, word) => {
+  return `${acc}  
+      <option "class="word">${word}</option>`;
+}, '');
+const elements = document.getElementsByClassName('word');
+
+[...elements].forEach((element) => {
+  element.addEventListener('click', () => {
+    element.classList.toggle('selected');
+  })
+});
+}
+</script>
+
     <title>Question Edit</title>
 {% endblock %}
 
@@ -64,24 +113,35 @@ color:#828e96
                     {% endfor %}
                     </select>
                 </div>
-                <div>
+                <div> 
                     <div class="input-group mb-3 p-2">
                         <span style='background-color:#1f8772;width:120px;; color:white' class="input-group-text" id="inputGroup-sizing-default">Question</span>
-                        <input name='question'type="text" class="form-control" value='{{question.question}}' aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                        <input style="width:170px;" id="content" name='question' type="text" class="form-control" value='{{question.question}}' aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                        <a  class="btn btn-danger btn-xs" href="#mark" onclick="render_text()">+</a>
                     </div>
                 </div>
-                <div>
-                    <div class="input-group mb-3 p-2">
-                        <span style='background-color:#1f8772; width:120px;; color:white' class="input-group-text" id="inputGroup-sizing-default">Answer</span>
-                        <input name='answer' type="text" class="form-control" value='{{question.answer}}' aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
-                    </div>
+                <div style="display: block;" name="mark"  id="mark_div">
+                    <span style='background-color:#1f8772;width:120px;; color:white' class="input-group-text" id="inputGroup-sizing-default">Answer</span>
+                    <select id="mark" class="form-control" name="answer" >
+                        <option value='{{question.answer}}' selected>{{question.answer}}</option>
+                    </select>
                 </div>
                 <div>
                     <div class="input-group mb-3 p-2">
                         <span style='background-color:#1f8772; width:120px;; color:white' class="input-group-text" id="inputGroup-sizing-default">Other Answer</span>
-                        <input name='alternative_answer' type="text" class="form-control" value='{{question.alternative_answer}}' aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                        <input name='alternative_answer1' type="text" class="form-control" value='{{question.alternative_answer1}}' aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                        <a  id="add_button" class="btn btn-danger btn-xs" href="#answer_2" onclick="open_Answer_2()">+</a>
                     </div>
                 </div>
+                {%if  question.alternative_answer2!="" %}
+                <div id="answer_2">
+                    <div class="input-group mb-3 p-2">
+                        <span style='background-color:#1f8772; width:120px;; color:white' class="input-group-text" id="inputGroup-sizing-default">Other Answer</span>
+                        <input id="input_answer2" name='alternative_answer2' type="text" class="form-control" value='{{question.alternative_answer2}}' aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                        <a  class="btn btn-danger btn-xs" href="#answer_2" onclick="close_Answer_2()">-</a>
+                    </div>
+                </div>
+                {%endif%}
                 <div>
                     <div class="input-group mb-3 p-2">
                         <span style='background-color:#1f8772; width:120px;; color:white' class="input-group-text" id="inputGroup-sizing-default">Score</span>
@@ -92,7 +152,7 @@ color:#828e96
             <div class="px-2 d-flex justify-content-center align-items-center">
                 <button style='height:38px' type="submit" class="new rounded ">Save</button>
             </div>
-            <a href="/questions"> <button onclick='off()' style='background-color:red' class="new rounded">Close</button></a>
+            <a href="/questions"> <button type="button" style='background-color:red' class="new rounded">Close</button></a>
             </div>
         </form>
         
