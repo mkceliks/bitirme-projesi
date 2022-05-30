@@ -54,6 +54,16 @@ color:#828e96
     }
 </script>
 <script>
+    function check_answer(){
+        if (document.getElementById("input_answer2").value != ''){
+
+            document.getElementById("answer_2").style.display = 'block';       
+        }else{
+            document.getElementById("answer_2").style.display = "none";
+        }
+       }
+</script>
+<script>
     function open_Answer_2() {
 
     document.getElementById('answer_2').style.display = 'block'
@@ -120,28 +130,29 @@ const elements = document.getElementsByClassName('word');
                         <a  class="btn btn-danger btn-xs" href="#mark" onclick="render_text()">+</a>
                     </div>
                 </div>
-                <div style="display: block;" name="mark"  id="mark_div">
+                
+                <div style="display: block;" name="mark"  id="mark_div" >
+                    <div class="input-group mb-3 p-2">
                     <span style='background-color:#1f8772;width:120px;; color:white' class="input-group-text" id="inputGroup-sizing-default">Answer</span>
-                    <select id="mark" class="form-control" name="answer" >
+                    <select id="mark" class="form-control" name="answer">
                         <option value='{{question.answer}}' selected>{{question.answer}}</option>
                     </select>
                 </div>
+            </div>
                 <div>
                     <div class="input-group mb-3 p-2">
                         <span style='background-color:#1f8772; width:120px;; color:white' class="input-group-text" id="inputGroup-sizing-default">Other Answer</span>
                         <input name='alternative_answer1' type="text" class="form-control" value='{{question.alternative_answer1}}' aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
                         <a  id="add_button" class="btn btn-danger btn-xs" href="#answer_2" onclick="open_Answer_2()">+</a>
                     </div>
-                </div>
-                {%if  question.alternative_answer2!="" %}
-                <div id="answer_2">
+                </div>                
+                <div id="answer_2" style="display: none;">
                     <div class="input-group mb-3 p-2">
                         <span style='background-color:#1f8772; width:120px;; color:white' class="input-group-text" id="inputGroup-sizing-default">Other Answer</span>
                         <input id="input_answer2" name='alternative_answer2' type="text" class="form-control" value='{{question.alternative_answer2}}' aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
                         <a  class="btn btn-danger btn-xs" href="#answer_2" onclick="close_Answer_2()">-</a>
                     </div>
                 </div>
-                {%endif%}
                 <div>
                     <div class="input-group mb-3 p-2">
                         <span style='background-color:#1f8772; width:120px;; color:white' class="input-group-text" id="inputGroup-sizing-default">Score</span>
