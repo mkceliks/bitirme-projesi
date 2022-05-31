@@ -128,10 +128,10 @@ def adduser_course(course_id):
         User.objects(user_name=content['course_id']).update_one(push__user_course=course_id)
         return redirect('/courses/{0}/details'.format(course_id))
     
-@app.route('/courses/<course_id>/details/deluser', methods=["POST"])
-def deluser_course(course_id):
+@app.route('/courses/<course_id>/<user_number>/details/deluser', methods=["POST"])
+def deluser_course(course_id,user_number):
     if request.method == "POST":
-        User.objects(user_course=course_id).update_one(pull__user_course=course_id)
+        User.objects(user_number=user_number).update_one(pull__user_course=course_id)
         return redirect('/courses/{0}/details'.format(course_id))
 
     
@@ -241,6 +241,7 @@ class User(db.Document):
     user_password = db.StringField()
     user_role = db.StringField()
     user_course = db.ListField(db.StringField())
+    user_exam=db.ListField(db.StringField())
     
     def to_json(self):
         return {
@@ -251,6 +252,7 @@ class User(db.Document):
                 "user_password" : self.user_password,
                 "user_role" : self.user_role,
                 "user_course" : self.user_course,
+                "user_exam": self.user_exam
             }
     
 @app.route('/users',methods = ['GET','POST'])
@@ -314,15 +316,17 @@ def update_user(user_number):
     
 #####################################################################################
 class Exam(db.Document):
-    exam_no   = db.IntField()
+    exam_id   = db.StringField()
     exam_course = db.StringField()
+    exam_name = db.StringField()
     exam_semester = db.StringField()
     exam_time = db.StringField()
     
     def to_json(self):
         return {
-                "exam_no"   : self.exam_no,
+                "exam_id"   : self.exam_id,
                 "exam_course" : self.exam_course,
+                "exam_name" : self.exam_name,
                 "exam_semester" : self.exam_semester,
                 "exam_time" : self.exam_time,
             }
@@ -331,46 +335,89 @@ class Exam(db.Document):
 def create_exam():
     if request.method == "GET":
         exams = []
+        courses=[]
+        for course in Course.objects:
+            courses.append(course)
         for exams2 in Exam.objects:
             exams.append(exams2)
-        return render_template("exams.html",exams=exams)
+        return render_template("exams.html",exams=exams , courses=courses)
     elif request.method == "POST":
         content = request.form
-        new_exam = Exam(exam_no=content['exam_no'], 
+        new_exam = Exam(exam_id=str(uuid4()), 
                           exam_course=content['exam_course'], 
+                          exam_name=content['exam_name'],
                           exam_semester=content['exam_semester'],
                           exam_time=content['exam_time'])
         new_exam.save()
         logger.info("Yeni sınav oluşturuldu.")
         return redirect(request.referrer)
     
-@app.route('/exams/<exam_no>/delete', methods=["POST"])
-def delete_exama(exam_no):
+@app.route('/exams/<exam_id>/delete', methods=["POST"])
+def delete_exama(exam_id):
     if request.method == "POST":
-        exam = Exam.objects(exam_no=exam_no).first()
+        exam = Exam.objects(exam_id=exam_id).first()
         exam.delete()
         return redirect(request.referrer)
     
-@app.route('/exams/<exam_no>/update', methods=["GET","POST"])
-def update_exam(exam_no):
+@app.route('/exams/<exam_id>/update', methods=["GET","POST"])
+def update_exam(exam_id):
     if request.method == "GET":
-        exam = Exam.objects(exam_no = exam_no).first()
+        exam = Exam.objects(exam_id = exam_id).first()
         return render_template("exam_edit.html",exam = exam)
     elif request.method == "POST":
         content = request.form
-        updated_exam = Exam.objects(exam_no=exam_no).first()
-        updated_exam.exam_no  = content['exam_no']
+        updated_exam = Exam.objects(exam_no=exam_id).first()
         updated_exam.exam_course  = content['exam_course']
+        updated_exam.exam_name = content['exam_name']
         updated_exam.exam_semester  = content['exam_semester']
         updated_exam.exam_time  = content['exam_time']
         updated_exam.save()
         return redirect('/exams')
 
-@app.route('/exams/<exam_no>/details', methods=["GET","POST"])
-def details_exams(exam_no):
+@app.route('/exams/<exam_id>/details/adduser', methods=["GET","POST"])
+def adduser_exam(exam_id):
+    if request.method == "GET":
+        users = []
+        for user2 in User.objects:
+            users.append(user2)
+        exam = Exam.objects(exam_id=exam_id).first()
+        return render_template("exam_adduser.html",users = users, exam = exam)
+    elif request.method == "POST":
+        content = request.form
+        exam = Exam.objects(exam_id=exam_id).first()
+        User.objects(user_name=content['exam_id']).update_one(push__user_exam=exam_id)
+        return redirect('/exams/{0}/details'.format(exam_id))
+
+
+@app.route('/exams/<exam_id>/<user_number>/details/deluser', methods=["POST"])
+def deluser_exam(exam_id,user_number):
+    if request.method == "POST":
+        User.objects(user_number=user_number).update_one(pull__user_exam=exam_id)
+        return redirect('/exams/{0}/details'.format(exam_id))
+
+@app.route('/exams/<exam_id>/details', methods=["GET","POST"])
+def details_exams(exam_id):
     if request.method == "GET": 
-        exam = Exam.objects(exam_no = exam_no).first()
-        return render_template("exam_details.html",exam=exam)
+        exam = Exam.objects(exam_id = exam_id).first()
+        users = []
+        for user2 in User.objects(user_exam=exam_id):
+            users.append(user2)
+        return render_template("exam_details.html",exam=exam, users=users)
+    
+
+@app.route('/exams/<exam_id>/questions' , methods=["GET"])
+def exam_questions(exam_id):
+    if request.method == "GET":
+        exam = Exam.objects(exam_id = exam_id).first()
+        exam_name = exam.exam_name
+        questions=[]
+        for question in Question.objects(exam=exam_name):
+            questions.append(question)
+        return render_template("exam_questions.html",questions=questions)
+    
+    
+
+         
 
 
 ####################################################################

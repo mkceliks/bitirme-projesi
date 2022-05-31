@@ -94,7 +94,7 @@ const elements = document.getElementsByClassName('word');
                                         <select class="form-select w-75 mb-3 p-2" name="exam"  onclick="onlyOne(this)">
                                         <option selected disabled>Select Exam</option>
                                         {% for exam in exams %}
-                                            <option value="{{exam.exam_course}}">{{exam.exam_course}}</option>
+                                            <option value="{{exam.exam_name}}">{{exam.exam_name}}</option>
                                         {% endfor %}
                                         </select>
                                     </div>

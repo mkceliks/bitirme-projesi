@@ -83,7 +83,7 @@ color:#828e96
                                 <div class="col-4">{{user.user_email}}</div>
                                 <div class="col-4">{{user.user_name}} {{user.user_surname}}</div>
                                 <div class="col pt-2 d-flex justify-content-end">
-                                    <form action='/courses/{{course.course_id}}/details/deluser' method="POST">
+                                    <form action='/courses/{{course.course_id}}/{{user.user_number}}/details/deluser' method="POST">
                                         <button style='border:none;color:white;' class="mx-2 rounded bg-danger" type="submit">Remove</button>
                                     </form>
                                 </div>
