@@ -4,6 +4,7 @@ from functools import wraps
 from passlib.hash import pbkdf2_sha256
 from flask_mongoengine import MongoEngine
 from uuid import uuid4
+import logging
 app = Flask(__name__)
 database_name = "API"
 login_manager = LoginManager()
@@ -13,6 +14,13 @@ login_manager.init_app(app)
 DB_URL ='mongodb+srv://admin:Jsz5AKtE7HPxIp2O@examscoring.k0pg0.mongodb.net/?retryWrites=true&w=majority'
 app.config["MONGODB_HOST"]= DB_URL
 
+logging.basicConfig(
+    filename="logfile.txt",
+    format="%(asctime)s - %(levelname)s - %(message)s ",
+    filemode="w",
+    level=logging.DEBUG)
+
+logger = logging.getLogger()
 
 db = MongoEngine()
 db.init_app(app)
@@ -170,6 +178,7 @@ def api_questions():
         question = Question(question_id=str(uuid4()), exam =content['exam'], 
                             question=sentence,answer=content['answer'],alternative_answer1=content['alternative_answer1'],alternative_answer2=content['alternative_answer2'],question_score=content['question_score'])
         question.save()
+        logger.info("Soru oluşturuldu.")
         return redirect(request.referrer)
      
 
@@ -263,6 +272,7 @@ def create_user():
                         user_password=pbkdf2_sha256.encrypt(content['user_password']),
                         user_role=content['user_role'])
         new_user.save()
+        logger.info("Yeni kullanıcı oluşturuldu.")
         return redirect(request.referrer)
     
 @app.route('/users/<user_number>/details', methods=["GET"])
@@ -331,6 +341,7 @@ def create_exam():
                           exam_semester=content['exam_semester'],
                           exam_time=content['exam_time'])
         new_exam.save()
+        logger.info("Yeni sınav oluşturuldu.")
         return redirect(request.referrer)
     
 @app.route('/exams/<exam_no>/delete', methods=["POST"])
@@ -409,6 +420,7 @@ def roles():
         content = request.form
         new_role = Roles(role_name=content['role_name'])
         new_role.save()
+        logger.info("Yeni rol oluşturuldu.")
         return redirect(request.referrer)
 
 @app.route('/roles/<role_name>/details', methods=["GET"])
