@@ -36,6 +36,67 @@ def login_required(f):
             flash('Please login or signup first!')
             return redirect('/loginform')
     return wrap
+##########################################################
+
+def login_required_course(f):
+    @wraps(f)
+    def wrap(*args, **kwargs):
+        login_user = Roles.objects.get(role_name = session['user_role'])
+        course_access = login_user.access
+        if 'user_email' in session and "course" in course_access:
+            return f(*args, **kwargs)
+        else:
+            flash('You are not able to see courses page!')
+            return redirect(request.referrer)
+    return wrap
+
+def login_required_question(f):
+    @wraps(f)
+    def wrap(*args, **kwargs):
+        login_user = Roles.objects.get(role_name = session['user_role'])
+        question_access = login_user.access
+        if 'user_email' in session and "question" in question_access:
+            return f(*args, **kwargs)
+        else:
+            flash('You are not able to see questions page!')
+            return redirect(request.referrer)
+    return wrap
+
+def login_required_roles(f):
+    @wraps(f)
+    def wrap(*args, **kwargs):
+        login_user = Roles.objects.get(role_name = session['user_role'])
+        roles_access = login_user.access
+        if 'user_email' in session and "roles" in roles_access:
+            return f(*args, **kwargs)
+        else:
+            flash('You are not able to see roles page!')
+            return redirect(request.referrer)
+    return wrap
+
+def login_required_exams(f):
+    @wraps(f)
+    def wrap(*args, **kwargs):
+        login_user = Roles.objects.get(role_name = session['user_role'])
+        exams_access = login_user.access
+        if 'user_email' in session and "exams" in exams_access:
+            return f(*args, **kwargs)
+        else:
+            flash('You are not able to see exams page!')
+            return redirect(request.referrer)
+    return wrap
+
+def login_required_users(f):
+    @wraps(f)
+    def wrap(*args, **kwargs):
+        login_user = Roles.objects.get(role_name = session['user_role'])
+        users_access = login_user.access
+        if 'user_email' in session and "users" in users_access:
+            return f(*args, **kwargs)
+        else:
+            flash('You are not able to see users page!')
+            return redirect(request.referrer)
+    return wrap
 
 @app.route('/')
 @login_required
@@ -65,6 +126,7 @@ class Course(db.Document):
             }
 
 @app.route('/courses', methods=["GET","POST"])
+@login_required_course
 def create_course():
     if request.method == "GET":
         courses = []
@@ -83,6 +145,7 @@ def create_course():
 
 
 @app.route('/courses/<course_id>/delete', methods=["POST"])
+@login_required_course
 def delete_course(course_id):
     if request.method == "POST":
         course = Course.objects(course_id=course_id).first()
@@ -91,6 +154,7 @@ def delete_course(course_id):
 
 
 @app.route('/courses/<course_id>/update', methods=["GET","POST"])
+@login_required_course
 def update_course(course_id):
     if request.method == "GET":
         course = Course.objects(course_id=course_id).first()
@@ -107,6 +171,7 @@ def update_course(course_id):
         return redirect('/courses')
 
 @app.route('/courses/<course_id>/details', methods=["GET","POST"])
+@login_required_course
 def details_course(course_id):
     if request.method == "GET": 
         users = []
@@ -116,6 +181,7 @@ def details_course(course_id):
         return render_template("course_details.html",course=course, users = users)
 
 @app.route('/courses/<course_id>/details/adduser', methods=["GET","POST"])
+@login_required_course
 def adduser_course(course_id):
     if request.method == "GET":
         users = []
@@ -129,6 +195,7 @@ def adduser_course(course_id):
         return redirect('/courses/{0}/details'.format(course_id))
     
 @app.route('/courses/<course_id>/<user_number>/details/deluser', methods=["POST"])
+@login_required_course
 def deluser_course(course_id,user_number):
     if request.method == "POST":
         User.objects(user_number=user_number).update_one(pull__user_course=course_id)
@@ -161,6 +228,7 @@ class Question(db.Document):
 
 
 @app.route('/questions', methods=["GET","POST"])
+@login_required_question
 def api_questions():
     if request.method == "GET":
         questions = []
@@ -183,6 +251,7 @@ def api_questions():
      
 
 @app.route('/questions/<question_id>/delete', methods=["POST"])
+@login_required_question
 def delete_func(question_id):
     if request.method == "POST":
         question= Question.objects(question_id=question_id).first()
@@ -191,6 +260,7 @@ def delete_func(question_id):
     
     
 @app.route('/question/<question_id>/details', methods=["GET"])
+@login_required_question
 def question_details_func(question_id):
     if request.method == "GET": 
         question= Question.objects(question_id=question_id).first()
@@ -203,6 +273,7 @@ def question_details_func(question_id):
 
 
 @app.route('/question/<question_id>/update', methods=["GET","POST"])
+@login_required_question
 def api_each_question(question_id):
     
     if request.method == "GET":
@@ -256,6 +327,7 @@ class User(db.Document):
             }
     
 @app.route('/users',methods = ['GET','POST'])
+@login_required_users
 def create_user():
     if request.method == "GET":       
         users = []
@@ -278,6 +350,7 @@ def create_user():
         return redirect(request.referrer)
     
 @app.route('/users/<user_number>/details', methods=["GET"])
+@login_required_users
 def details_user(user_number):
     if request.method == "GET": 
         roles = []
@@ -287,6 +360,7 @@ def details_user(user_number):
         return render_template("user_details.html",user=user,roles=roles)
         
 @app.route('/users/<user_number>/delete', methods=["POST"])
+@login_required_users
 def delete_user(user_number):
     if request.method == "POST":
         user = User.objects(user_number=user_number).first()
@@ -294,6 +368,7 @@ def delete_user(user_number):
         return redirect(request.referrer)
     
 @app.route('/users/<user_number>/update', methods=["GET","POST"])
+@login_required_users
 def update_user(user_number):
     if request.method == "GET":
         roles = []
@@ -332,6 +407,7 @@ class Exam(db.Document):
             }
     
 @app.route('/exams', methods=["GET","POST"])
+@login_required_exams
 def create_exam():
     if request.method == "GET":
         exams = []
@@ -353,6 +429,7 @@ def create_exam():
         return redirect(request.referrer)
     
 @app.route('/exams/<exam_id>/delete', methods=["POST"])
+@login_required_exams
 def delete_exama(exam_id):
     if request.method == "POST":
         exam = Exam.objects(exam_id=exam_id).first()
@@ -360,6 +437,7 @@ def delete_exama(exam_id):
         return redirect(request.referrer)
     
 @app.route('/exams/<exam_id>/update', methods=["GET","POST"])
+@login_required_exams
 def update_exam(exam_id):
     if request.method == "GET":
         exam = Exam.objects(exam_id = exam_id).first()
@@ -375,6 +453,7 @@ def update_exam(exam_id):
         return redirect('/exams')
 
 @app.route('/exams/<exam_id>/details/adduser', methods=["GET","POST"])
+@login_required_exams
 def adduser_exam(exam_id):
     if request.method == "GET":
         users = []
@@ -390,12 +469,14 @@ def adduser_exam(exam_id):
 
 
 @app.route('/exams/<exam_id>/<user_number>/details/deluser', methods=["POST"])
+@login_required_exams
 def deluser_exam(exam_id,user_number):
     if request.method == "POST":
         User.objects(user_number=user_number).update_one(pull__user_exam=exam_id)
         return redirect('/exams/{0}/details'.format(exam_id))
 
 @app.route('/exams/<exam_id>/details', methods=["GET","POST"])
+@login_required_exams
 def details_exams(exam_id):
     if request.method == "GET": 
         exam = Exam.objects(exam_id = exam_id).first()
@@ -406,6 +487,7 @@ def details_exams(exam_id):
     
 
 @app.route('/exams/<exam_id>/questions' , methods=["GET"])
+@login_required_exams
 def exam_questions(exam_id):
     if request.method == "GET":
         exam = Exam.objects(exam_id = exam_id).first()
@@ -437,26 +519,31 @@ def login():
     if login_user:
         if pbkdf2_sha256.verify(content['password'],login_user['user_password']):
             session['user_email'] = content['email']
-            return redirect('/courses')
+            session['user_role'] = login_user['user_role']
+            return redirect('/index')
     flash('Invalid email or password.')
     return render_template('login.html')
 
 @app.route('/logout', methods=['GET'])
 def logout():
     session.pop('user_email', None)
+    session.pop('user_role', None)
     flash('You were successfully logged out')
     return redirect('/loginform')
 
 class Roles(db.Document):
     
     role_name   = db.StringField()
-    
+    access = db.ListField(db.StringField())
+
     def to_json(self):
         return {
                 "role_name"   : self.role_name,
+                "access" : self.access                
             }
 
 @app.route('/roles', methods=['GET','POST'])
+@login_required_roles
 def roles():
     if request.method == "GET":
         roles = []
@@ -467,10 +554,16 @@ def roles():
         content = request.form
         new_role = Roles(role_name=content['role_name'])
         new_role.save()
+        Roles.objects(role_name=content['role_name']).update_one(push__access=content['access_1'])
+        Roles.objects(role_name=content['role_name']).update_one(push__access=content['access_2'])
+        Roles.objects(role_name=content['role_name']).update_one(push__access=content['access_3'])
+        Roles.objects(role_name=content['role_name']).update_one(push__access=content['access_4'])
+        Roles.objects(role_name=content['role_name']).update_one(push__access=content['access_5'])
         logger.info("Yeni rol oluşturuldu.")
         return redirect(request.referrer)
 
 @app.route('/roles/<role_name>/details', methods=["GET"])
+@login_required_roles
 def details_role(role_name):
     if request.method == "GET": 
         users = []
@@ -480,6 +573,7 @@ def details_role(role_name):
         return render_template("roles_details.html",role=role, users=users)
 
 @app.route('/roles/<role_name>/delete', methods=["POST"])
+@login_required_roles
 def delete_role(role_name):
     if request.method == "POST":
         role = Roles.objects(role_name=role_name).first()
@@ -487,6 +581,7 @@ def delete_role(role_name):
         return redirect(request.referrer)
 
 @app.route('/roles/<role_name>/update', methods=["GET","POST"])
+@login_required_roles
 def update_role(role_name):
     if request.method == "GET":
         role = Roles.objects(role_name=role_name).first()
@@ -496,9 +591,16 @@ def update_role(role_name):
         updated_role = Roles.objects(role_name=role_name).first()
         updated_role2 = User.objects(user_role=role_name).first()
         updated_role.role_name = content['role_name']
-        updated_role2.user_role = content['role_name']
-        updated_role.save()
-        updated_role2.save()
+        if updated_role2 != None:
+            updated_role2.user_role = content['role_name']
+            updated_role2.save()
+        updated_role.save()       
+        updated_role.update(pull_all__access = ['course','exams','question','users','roles','Null'])
+        Roles.objects(role_name=content['role_name']).update_one(push__access=content['access_1'])
+        Roles.objects(role_name=content['role_name']).update_one(push__access=content['access_2'])
+        Roles.objects(role_name=content['role_name']).update_one(push__access=content['access_3'])
+        Roles.objects(role_name=content['role_name']).update_one(push__access=content['access_4'])
+        Roles.objects(role_name=content['role_name']).update_one(push__access=content['access_5'])
         return redirect('/roles')
 
 @login_manager.user_loader

@@ -26,6 +26,15 @@
         </div>
         
     </div>
+    <div class="container">
+        {% block flash %}
+            {% for message in get_flashed_messages() %}
+            <div style="text-align: center;" class="alert alert-danger">
+              <i style="cursor: pointer;" onclick=delete_flash(this)><img src="../static/icons8-close-48.png" alt=""></i>
+                {{ message }}
+            </div>
+            {% endfor %}{% endblock %}
+        </div>
     <form method="GET" action="{{ url_for('logout') }}">
     <button type="submit" style="float:right;color:#ffffff;font-weight:600;margin-right:5%;" class="mt-4 btn btn-danger">Logout</button>
     </form>
@@ -33,5 +42,11 @@
             
     {% endblock %}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        function delete_flash(flash){
+            $(flash).parent().remove()
+        }
+        
+      </script>
 </body>
 </html>
