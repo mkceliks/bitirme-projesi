@@ -1,0 +1,155 @@
+{% extends 'design.html' %} {% block head %}
+<script>
+    function newform() {
+        document.getElementById("newform").style.display = 'block';
+    }
+
+    function off() {
+        document.getElementById("newform").style.display = 'none';
+    }
+
+    function details() {
+        let value
+        document.getElementById("newform").style.display = 'block';
+    }
+</script>
+<title>Exams</title>
+{% endblock %}
+
+<body>
+    {% block body %}
+    <div class='ps-3 pt-3' style=" margin-left:10%;">
+        <div style="font-size:36px; font-weight:150;color:#5e5e5e;">Index</div>
+        <div style='font-size:20px;font-weight:600 ;padding-bottom:10px'>Exams</div>
+    </div>
+    <div style="margin-left:10%; height:1px;background-color:lightgray"></div>
+    <div class='pt-2' style='margin-left:10%;height:100%; background-color:#f1f1f3'>
+        <div style='height:100%' class="d-flex justify-content-center p-3 ">
+            <div class="d-flex flex-column " style="height:100%; width:100%;  background-color:white">
+                <div class="d-flex justify-content-between p-2">
+                    <div style="font-weight:600" class="align-self-center">
+                        List of Exams
+                    </div>
+                    <!-- <div>
+                        <button onClick="newform()" class="new align-self-center rounded" id="newbutton">Create New</button>
+                    </div> -->
+                </div>
+                <div style=" height:2px;background-color:#f1f1f3"></div>
+                <div id='newform' style='display:none'>
+                    <div style="font-size:36px; font-weight:150;color:#5e5e5e;" class="text-center">Create New Exam</div>
+                    <div>
+                        <form class="d-flex justify-content-center flex-column align-items-center" action='/exams' method="POST">
+                            <div>
+                                <div>
+                                    <div class="input-group mb-3 p-2">
+                                        <select class="form-select w-75 mb-3 p-2" name="exam_course" onclick="onlyOne(this)">
+                                    <option selected disabled>Select Course</option>
+                                    {% for course in courses %}
+                                        <option value="{{course.course_name}}">{{course.course_name}}</option>
+                                    {% endfor %}
+                                    </select>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="input-group mb-3 p-2">
+                                        <span style='background-color:#1f8772;width:120px;; color:white' class="input-group-text" id="inputGroup-sizing-default">Exam Name</span>
+                                        <input name='exam_name' type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="input-group mb-3 p-2">
+                                        <span style='background-color:#1f8772; width:120px;; color:white' class="input-group-text" id="inputGroup-sizing-default">Exam Semester</span>
+                                        <input name='exam_semester' type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="input-group mb-3 p-2">
+                                        <span style='background-color:#1f8772; width:120px; color:white' class="input-group-text" id="inputGroup-sizing-default">Exam Date</span>
+                                        <input name='exam_time' type="date" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="px-2 d-flex justify-content-center align-items-center">
+                                <button style='height:38px' type="text" class="new rounded ">Create</button>
+                            </div>
+                        </form>
+                        <div class='d-flex justify-content-center align-items-center'>
+
+                            <div class="px-2 pt-2 ">
+                                <button onclick='off()' style='background-color:red' class="new rounded">Close</button>
+                            </div>
+
+
+                        </div>
+
+                    </div>
+                </div>
+                <div class="d-flex flex-column p-2">
+                    <div class='mt-2' style=" height:1px;background-color:lightgray"></div>
+                    <div class="container">
+                        <div class="row" style="font-weight:600">
+                            <div class="col-md-1">No</div>
+                            <div class="col-md-3">Course</div>
+                            <div class="col-md-3">Course Name</div>
+                            <div class="col-md-3">Semester</div>
+                            <div class="col-md-2">DateTime</div>
+                        </div>
+                        {% set count = namespace(value=1) %} {% for exam in exams %}
+                        <div class="row" style="font-weight:400">
+
+                            <div class='mt-2' style=" height:1px;background-color:lightgray"></div>
+                            <div class="col-md-1 pt-2">{{count.value}}</div>
+                            <div class="col-md-3 pt-2">{{exam.exam_course}}</div>
+                            <div class="col-md-3 pt-2">{{exam.exam_name}}</div>
+                            <div class="col-md-3 pt-2">{{exam.exam_semester}}</div>
+                            <div class="col-md-2 pt-2">{{exam.exam_time}}</div>
+
+                            <div class="col pt-2 d-flex justify-content-end">
+                                <!-- <form action='/exams/{{exam.exam_id}}/details' method="GET">
+                                    <button style='border:none;background-color:aqua;color:white;' class="mx-1 rounded bg-success" type="submit">Enroll</button>
+                                </form> -->
+                                <!-- <form  action='/exams/{{exam.exam_id}}/questions' method="GET">
+                                    <button style=' border:none;color:white;' class="mx-1 rounded bg-secondary" type="submit">Questions</button>
+                                    
+                                </form>
+                                <form action='/exams/{{exam.exam_id}}/update' method="GET">
+                                    <button style=' border:none;color:white;' class=" bg-warning mx-1 rounded" type="submit">Edit</button>
+                                </form>
+                                <form action='/exams/{{exam.exam_id}}/delete' method="POST">
+                                    <button style='border:none;color:white;' class="mx-1 rounded bg-danger" type="submit">Delete</button>
+                                </form> -->
+                             
+                                <!-- <form action='/exams/{{exam.exam_id}}/delete' method="POST">
+                                    <button style='border:none;color:white;' class="mx-1 rounded bg-success" type="submit">Enroll</button>
+                                </form>
+                                <form action='/exams/{{exam.exam_id}}/delete' method="POST">
+                                    <button style='border:none;color:white;' class="mx-1 rounded bg-primary" type="submit">Evaluate</button>
+                                </form>
+                                <form action='/exams/{{exam.exam_id}}/delete' method="POST">
+                                    <button style='border:none;color:white;' class="mx-1 rounded bg-secondary" type="submit">Score</button>
+                                </form> -->
+
+
+
+
+
+                            </div>
+
+                        </div>
+                        {% set count.value = count.value + 1 %} {% endfor %}
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endblock %}
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+</body>
+
+</html>

@@ -128,11 +128,16 @@ class Course(db.Document):
 @app.route('/courses', methods=["GET","POST"])
 @login_required_course
 def create_course():
+    login_user = Roles.objects.get(role_name = session['user_role'])
+    course_access = login_user.access
     if request.method == "GET":
         courses = []
         for course2 in Course.objects:
             courses.append(course2)
-        return render_template("courses.html",courses=courses)
+        if "full_access_course" in course_access:
+            return render_template("full_access/courses.html",courses=courses)
+        elif "limited_access_course" in course_access:
+            return render_template("limited_access/courses.html",courses=courses)
     elif request.method == "POST":
         content = request.form
         new_course = Course(course_id=content['course_id'], 
@@ -230,6 +235,8 @@ class Question(db.Document):
 @app.route('/questions', methods=["GET","POST"])
 @login_required_question
 def api_questions():
+    login_user = Roles.objects.get(role_name = session['user_role'])
+    course_access = login_user.access
     if request.method == "GET":
         questions = []
         exams= []
@@ -237,7 +244,10 @@ def api_questions():
             exams.append(exam)
         for questionn in Question.objects:
             questions.append(questionn)
-        return render_template("questions.html",questions= questions,exams=exams)
+        if "full_access_questions" in course_access:
+            return render_template("full_access/questions.html",questions= questions,exams=exams)
+        elif "limited_access_questions" in course_access:
+            return render_template("limited_access/questions.html",questions= questions,exams=exams)
     elif request.method == "POST":
         content = request.form
         sentence=content['question']
@@ -329,6 +339,8 @@ class User(db.Document):
 @app.route('/users',methods = ['GET','POST'])
 @login_required_users
 def create_user():
+    login_user = Roles.objects.get(role_name = session['user_role'])
+    course_access = login_user.access
     if request.method == "GET":       
         users = []
         roles = []
@@ -336,7 +348,10 @@ def create_user():
             users.append(user2)
         for user_roles in Roles.objects:
             roles.append(user_roles)
-        return render_template("users.html",users = users, roles=roles)
+        if "full_access_users" in course_access:
+            return render_template("full_access/users.html",users = users, roles=roles)
+        elif "limited_access_users" in course_access:
+            return render_template("limited_access/users.html",users = users, roles=roles)
     elif request.method == "POST":
         content = request.form
         new_user = User(user_name=content['user_name'], 
@@ -409,6 +424,8 @@ class Exam(db.Document):
 @app.route('/exams', methods=["GET","POST"])
 @login_required_exams
 def create_exam():
+    login_user = Roles.objects.get(role_name = session['user_role'])
+    course_access = login_user.access
     if request.method == "GET":
         exams = []
         courses=[]
@@ -416,7 +433,10 @@ def create_exam():
             courses.append(course)
         for exams2 in Exam.objects:
             exams.append(exams2)
-        return render_template("exams.html",exams=exams , courses=courses)
+        if "full_access_exams" in course_access:
+            return render_template("full_access/exams.html",exams=exams , courses=courses)
+        elif "limited_access_exams" in course_access:
+            return render_template("limited_access/exams.html",exams=exams , courses=courses)
     elif request.method == "POST":
         content = request.form
         new_exam = Exam(exam_id=str(uuid4()), 
@@ -545,11 +565,16 @@ class Roles(db.Document):
 @app.route('/roles', methods=['GET','POST'])
 @login_required_roles
 def roles():
+    login_user = Roles.objects.get(role_name = session['user_role'])
+    course_access = login_user.access
     if request.method == "GET":
         roles = []
         for user_roles in Roles.objects:
             roles.append(user_roles)
-        return render_template("roles.html",roles = roles)
+        if "full_access_roles" in course_access:
+            return render_template("full_access/roles.html",roles = roles)
+        elif "limited_access_roles" in course_access:
+            return render_template("limited_access/roles.html",roles = roles)
     elif request.method == "POST":
         content = request.form
         new_role = Roles(role_name=content['role_name'])
@@ -559,6 +584,11 @@ def roles():
         Roles.objects(role_name=content['role_name']).update_one(push__access=content['access_3'])
         Roles.objects(role_name=content['role_name']).update_one(push__access=content['access_4'])
         Roles.objects(role_name=content['role_name']).update_one(push__access=content['access_5'])
+        Roles.objects(role_name=content['role_name']).update_one(push__access=content['access_6'])
+        Roles.objects(role_name=content['role_name']).update_one(push__access=content['access_7'])
+        Roles.objects(role_name=content['role_name']).update_one(push__access=content['access_8'])
+        Roles.objects(role_name=content['role_name']).update_one(push__access=content['access_9'])
+        Roles.objects(role_name=content['role_name']).update_one(push__access=content['access_10'])
         logger.info("Yeni rol oluşturuldu.")
         return redirect(request.referrer)
 
@@ -595,12 +625,17 @@ def update_role(role_name):
             updated_role2.user_role = content['role_name']
             updated_role2.save()
         updated_role.save()       
-        updated_role.update(pull_all__access = ['course','exams','question','users','roles','Null'])
+        updated_role.update(pull_all__access = ['course','exams','question','users','roles','Null','full_access_roles','limited_access_roles','full_access_exams','limited_access_exams','full_access_questions','limited_access_questions','full_access_users','limited_access_users','full_access_course','limited_access_course'])
         Roles.objects(role_name=content['role_name']).update_one(push__access=content['access_1'])
         Roles.objects(role_name=content['role_name']).update_one(push__access=content['access_2'])
         Roles.objects(role_name=content['role_name']).update_one(push__access=content['access_3'])
         Roles.objects(role_name=content['role_name']).update_one(push__access=content['access_4'])
         Roles.objects(role_name=content['role_name']).update_one(push__access=content['access_5'])
+        Roles.objects(role_name=content['role_name']).update_one(push__access=content['access_6'])
+        Roles.objects(role_name=content['role_name']).update_one(push__access=content['access_7'])
+        Roles.objects(role_name=content['role_name']).update_one(push__access=content['access_8'])
+        Roles.objects(role_name=content['role_name']).update_one(push__access=content['access_9'])
+        Roles.objects(role_name=content['role_name']).update_one(push__access=content['access_10'])
         return redirect('/roles')
 
 @login_manager.user_loader

@@ -51,38 +51,68 @@ color:#828e96
     <div class="mt-4">
         <div style="font-size:36px; font-weight:150;color:#5e5e5e;" class="text-center">Edit Role</div>
         <form class="d-flex justify-content-center flex-column align-items-center" action='/roles/{{role.role_name}}/update' method="POST">
-            <div>
+            <div style="margin-left:11%;">
                 <div>
                     <div class="input-group mb-3 p-2">
-                        <span style='background-color:#1f8772;width:120px;; color:white' class="input-group-text" id="inputGroup-sizing-default">Role Name</span>
+                        <span style='background-color:#1f8772;width:250px; color:white' class="input-group-text" id="inputGroup-sizing-default">Role Name</span>
                         <input name='role_name' type="text" class="form-control" value='{{role.role_name}}' aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
                     </div>
                 </div>
-
+                <div>           
                 <div class="input-group mb-3 p-2">
-                    <select class="form-select w-75 mb-3 p-2" name="access_1">
+                    <select class="form-select w-50 mb-3 p-2" name="access_1">
                     <option value="course" selected>Course</option>
                     <option value="Null">Don't Reach Course</option>
                     </select>
-                    <select class="form-select w-75 mb-3 p-2" name="access_2">
+                    <span style='background-color:#1f8772;width:120px;text-align: center; color:white' class="mb-3 p-2"><strong>Type :</strong></span>
+                    <select class="form-select w-25 mb-3 p-2" name="access_2">
+                        <option value="full_access_course" selected>Full Access</option>
+                        <option value="limited_access_course">Limited Access</option>
+                    </select>
+
+                    <select class="form-select w-50 mb-3 p-2" name="access_3">
                     <option value="exams" selected>Exams</option>
                     <option value="Null">Don't Reach Exams</option>
                     </select>
-                    <select class="form-select w-75 mb-3 p-2" name="access_3">
+                    <span style='background-color:#1f8772;width:120px;text-align: center; color:white' class="mb-3 p-2"><strong>Type :</strong></span>
+                    <select class="form-select w-25 mb-3 p-2" name="access_4">
+                        <option value="full_access_exams" selected>Full Access</option>
+                        <option value="limited_access_exams">Limited Access</option>
+                    </select>
+
+                    <select class="form-select w-50 mb-3 p-2" name="access_5">
                     <option value="question" selected>Questions</option>
                     <option value="Null">Don't Reach Questions</option>
                     </select>
-                    <select class="form-select w-75 mb-3 p-2" name="access_4">
+                    <span style='background-color:#1f8772;width:120px;text-align: center; color:white' class="mb-3 p-2"><strong>Type :</strong></span>
+                    <select class="form-select w-25 mb-3 p-2" name="access_6">
+                        <option value="full_access_questions" selected>Full Access</option>
+                        <option value="limited_access_questions">Limited Access</option>
+                    </select>
+
+                    <select class="form-select w-50 mb-3 p-2" name="access_7">
                     <option value="users" selected>Users</option>
                     <option value="Null">Don't Reach Users</option>
                     </select>
-                    <select class="form-select w-75 mb-3 p-2" name="access_5">
+                    <span style='background-color:#1f8772;width:120px;text-align: center; color:white' class="mb-3 p-2"><strong>Type :</strong></span>
+                    <select class="form-select w-25 mb-3 p-2" name="access_8">
+                        <option value="full_access_users" selected>Full Access</option>
+                        <option value="limited_access_users">Limited Access</option>
+                    </select>
+
+                    <select class="form-select w-50 mb-3 p-2" name="access_9">
                     <option value="roles" selected>Roles</option>
                     <option value="Null">Don't Reach Roles</option>
+                    </select>
+                    <span style='background-color:#1f8772;width:120px;text-align: center; color:white' class="mb-3 p-2"><strong>Type :</strong></span>
+                    <select class="form-select w-25 mb-3 p-2" name="access_10">
+                        <option value="full_access_roles" selected>Full Access</option>
+                        <option value="limited_access_roles">Limited Access</option>
                     </select>
                 </div>
 
             </div>  
+        </div>
             <div class="px-2 d-flex justify-content-center align-items-center">
                 <button style='height:38px' type="submit" class="new rounded ">Save</button>
             </div>

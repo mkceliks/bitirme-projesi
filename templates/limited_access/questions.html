@@ -1,0 +1,212 @@
+{% extends 'design.html' %} {% block head %}
+<style>
+    .word {
+    cursor: pointer;
+  }
+  
+.selected {
+    background-color: palegreen;
+  }
+</style>
+<script>
+    function newform() {
+        document.getElementById("newform").style.display = 'block';
+    }
+
+    function off() {
+        document.getElementById("newform").style.display = 'none';
+    }
+
+    function details() {
+        let value
+        document.getElementById("newform").style.display = 'block';
+    }
+</script>
+<script>
+    function open_Answer_2() {
+
+    document.getElementById('answer_2').style.display = 'block'
+    document.getElementById('add_button').style.display = 'none'
+    document.getElementById('add_input').style.display = 'width:250px'
+        
+    }
+    function close_Answer_2() {
+
+        document.getElementById('answer_2').style.display = 'none'
+        document.getElementById('add_button').style.display = 'block'
+            
+        }
+    function render_text() {
+    const example = document.getElementById('content').value;
+    document.getElementById('mark_div').style.display = 'block'
+    
+    const words = example.split(" ");
+
+document.getElementById('mark').innerHTML = words.reduce((acc, word) => {
+  return `${acc}  
+      <option "class="word">${word}</option>`;
+}, '');
+const elements = document.getElementsByClassName('word');
+
+[...elements].forEach((element) => {
+  element.addEventListener('click', () => {
+    element.classList.toggle('selected');
+  })
+});
+}
+</script>
+
+<script>
+
+
+</script>
+
+<title>Questions</title>
+{% endblock %}
+
+<body>
+    {% block body %}
+    <div class='ps-3 pt-3' style=" margin-left:10%;">
+        <div style="font-size:36px; font-weight:150;color:#5e5e5e;">Index</div>
+        <div style='font-size:20px;font-weight:600 ;padding-bottom:10px'>Questions</div>
+    </div>
+    <div style="margin-left:10%; height:1px;background-color:lightgray"></div>
+    <div class='pt-2' style='margin-left:10%;height:100%; background-color:#f1f1f3'>
+        <div style='height:100%' class="d-flex justify-content-center p-3 ">
+            <div class="d-flex flex-column " style="height:100%; width:100%;  background-color:white">
+                <div class="d-flex justify-content-between p-2">
+                    <div style="font-weight:600" class="align-self-center">
+                        List of Questions
+                    </div>
+                    <!-- <div>
+                        <button onClick="newform()" class="new align-self-center rounded" id="newbutton">Create New</button>
+                    </div> -->
+                </div>
+                <div style=" height:2px;background-color:#f1f1f3"></div>
+                <div id='newform' style='display:none'>
+                    <div style="font-size:36px; font-weight:150;color:#5e5e5e;" class="text-center">New Question</div>
+                    <div>
+                        <form class="d-flex justify-content-center flex-column align-items-center" action='/questions' method="POST">
+                            <div>
+
+                                <div> 
+                                    <div class="input-group mb-3 p-2">
+                                        <select class="form-select w-75 mb-3 p-2" name="exam"  onclick="onlyOne(this)">
+                                        <option selected disabled>Select Exam</option>
+                                        {% for exam in exams %}
+                                            <option value="{{exam.exam_name}}">{{exam.exam_name}}</option>
+                                        {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div> 
+                                    <div class="input-group mb-3 p-2">
+                                        <span style='background-color:#1f8772;width:120px;; color:white' class="input-group-text" id="inputGroup-sizing-default">Question</span>
+                                        <input style="width:170px;" id="content" name='question' type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                                        <a  class="btn btn-danger btn-xs" href="#mark" onclick="render_text()">+</a>
+                                    </div>
+                                </div>
+                                <div style="display: none;" name="mark"  id="mark_div">
+                                    <div class="input-group mb-3 p-2">
+                                    <span style='background-color:#1f8772;width:120px;; color:white' class="input-group-text" id="inputGroup-sizing-default">Answer</span>
+                                    <select id="mark" class="form-control" name="answer">
+
+                                    </select>
+                                </div>
+                                </div>
+                                <!-- <div>
+                                    <div class="input-group mb-3 p-2">
+                                        <span style='background-color:#1f8772; width:120px; color:white' class="input-group-text" id="inputGroup-sizing-default">Answer</span>
+                                        <input name='answer' type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                                    </div>
+                                </div> -->
+                            </div>
+                            <div>
+                                <div class="input-group mb-3 p-2">
+                                    <span style='background-color:#1f8772; width:120px;; color:white' class="input-group-text" id="inputGroup-sizing-default">Other Answer</span>
+                                    <input id="add_input" style="width:170px;" name='alternative_answer1' type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                                    <a  id="add_button" class="btn btn-danger btn-xs" href="#answer_2" onclick="open_Answer_2()">+</a>
+                                </div>
+                            </div>
+                            <div style="display: none;" id="answer_2">
+                                <div class="input-group mb-3 p-2">
+                                    <span style='background-color:#1f8772; width:120px;; color:white' class="input-group-text" id="inputGroup-sizing-default">Other Answer</span>
+                                    <input style="width:170px;" name='alternative_answer2' type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                                    <a  class="btn btn-danger btn-xs" href="#answer_2" onclick="close_Answer_2()">-</a>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="input-group mb-3 p-2">
+                                    <span style='background-color:#1f8772; width:120px;; color:white' class="input-group-text" id="inputGroup-sizing-default">Score</span>
+                                    <input name='question_score' type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                                </div>
+                            </div>
+
+                            <div class="px-2 d-flex justify-content-center align-items-center">
+                                <button style='height:38px' type="text" class="new rounded ">Create</button>
+                            </div>
+                        </form>
+                        <div class='d-flex justify-content-center align-items-center'>
+
+                            <div class="px-2 pt-2 ">
+                                <button onclick='off()' style='background-color:red' class="new rounded">Close</button>
+                            </div>
+
+
+                        </div>
+
+                    </div>
+                </div>
+                <div class="d-flex flex-column p-2">
+                    <div class='mt-2' style=" height:1px;background-color:lightgray"></div>
+                    <div class="container">
+                        <div class="row" style="font-weight:600">
+                            <div class="col-sm">No</div>
+                            <div class="col-sm">Exam</div>
+                            <div class="col-sm">Question</div>
+                            <div class="col-sm">Score</div>
+                            <div class="col-sm"></div>
+                        </div>
+                        {%  set count = namespace(value=1) %}
+                        {% for question in questions %}
+                        <div class="row" style="font-weight:400">
+
+                            <div class='mt-2' style=" height:1px;background-color:lightgray"></div>
+                            <div class="col pt-2">{{count.value}}</div>
+                            <div class="col pt-2">{{question.exam}}</div>
+                            <div class="col pt-2">{{question.question}}</div>
+                            <div class="col pt-2">{{question.question_score}}</div>
+                            <div class="col pt-2 d-flex justify-content-end">
+                                <!-- <form action='question/{{question.question_id}}/details' method="GET">
+                                    <button style='width:100px;border:none;background-color:aqua;color:white;' class="mx-2 rounded" type="submit">Details</button>
+                                </form> -->
+                                <!-- <form action="/question/{{question.question_id}}/update" method="GET">
+                                    <button style=' border:none;color:white;' class=" bg-warning mx-2 rounded" type="submit">Edit</button>
+                                </form>
+                                <form action="/questions/{{question.question_id}}/delete" method="POST">
+                                    <button style='border:none;color:white;' class="mx-2 rounded bg-danger" type="submit">Delete</button>
+                                </form> -->
+
+
+
+
+                            </div>
+
+                        </div>
+                        {% set count.value = count.value + 1 %}
+                        {% endfor %}
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endblock %}
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+</body>
+
+</html>

@@ -1,0 +1,139 @@
+{% extends 'design.html' %}
+{% block head %}
+    <script>
+        function newform() {
+            document.getElementById("newform").style.display = 'block';
+      }
+      function off() {
+        document.getElementById("newform").style.display = 'none';
+      }
+      function details(){
+        let value
+        document.getElementById("newform").style.display = 'block';
+      }
+    </script>
+    <title>Courses</title>
+{% endblock %}
+<body>
+    {% block body %}
+    <div class='ps-3 pt-3'style=" margin-left:10%;">
+        <div style="font-size:36px; font-weight:150;color:#5e5e5e;">Index</div>
+        <div style='font-size:20px;font-weight:600 ;padding-bottom:10px'>Courses</div>
+    </div>
+    <div style="margin-left:10%; height:1px;background-color:lightgray"></div>
+    <div class='pt-2' style='margin-left:10%;height:100%; background-color:#f1f1f3'>
+        <div style='height:100%' class="d-flex justify-content-center p-3 ">
+        <div class="d-flex flex-column " style="height:100%; width:100%;  background-color:white">
+            <div class="d-flex justify-content-between p-2">
+                <div style="font-weight:600" class="align-self-center">
+                    List of Courses
+                </div>
+                <!-- <div>
+                    <button  onClick="newform()" class="new align-self-center rounded" id="newbutton">Create New</button>
+                </div>     -->
+            </div>
+            <div style=" height:2px;background-color:#f1f1f3"></div>
+            <div id='newform' style='display:none'>
+                <div style="font-size:36px; font-weight:150;color:#5e5e5e;" class="text-center">Create New Course</div>
+                <div>
+                    <form class="d-flex justify-content-center flex-column align-items-center" action='/courses' method="POST">
+                        <div>
+                            <div>
+                                <div class="input-group mb-3 p-2">
+                                    <span style='background-color:#1f8772;width:120px;; color:white' class="input-group-text" id="inputGroup-sizing-default">Course ID</span>
+                                    <input name='course_id' type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                                </div>
+                            </div>
+                            <div>
+                                <div class="input-group mb-3 p-2">
+                                    <span style='background-color:#1f8772;width:120px;; color:white' class="input-group-text" id="inputGroup-sizing-default">Course Name</span>
+                                    <input name='course_name'type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                                </div>
+                            </div>
+                            <div>
+                                <div class="input-group mb-3 p-2">
+                                    <span style='background-color:#1f8772; width:120px;; color:white' class="input-group-text" id="inputGroup-sizing-default">Description</span>
+                                    <input name='course_desc' type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                                </div>
+                            </div>
+                            <div>
+                                <div class="input-group mb-3 p-2">
+                                    <span style='background-color:#1f8772; width:120px; color:white' class="input-group-text" id="inputGroup-sizing-default">Date</span>
+                                    <input  name='course_date' type="date" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                                </div>
+                            </div> 
+                        </div>
+                        <div>
+                            <div class="input-group mb-3 p-2">
+                                <span style='background-color:#1f8772; width:120px;; color:white' class="input-group-text" id="inputGroup-sizing-default">Term</span>
+                                <input name='course_term' type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                            </div>
+                        </div>
+                        
+                        <div class="px-2 d-flex justify-content-center align-items-center">
+                            <button style='height:38px' type="text" class="new rounded ">Create</button>
+                        </div>
+                    </form>
+                    <div class='d-flex justify-content-center align-items-center'>
+
+                            <div class="px-2 pt-2 ">
+                                <button  onclick='off()' style='background-color:red' class="new rounded" >Close</button>
+                            </div> 
+                        
+                       
+                    </div>
+                    
+                </div>
+            </div>
+            <div class="d-flex flex-column p-2">
+                <div class='mt-2' style=" height:1px;background-color:lightgray"></div>
+                <div class="container" >
+                    <div class="row" style="font-weight:600">
+                        <div class="col-sm">Course ID</div>
+                        <div class="col-sm">Course Name</div>
+                        <div class="col-sm">Description</div>
+                        <div class="col-sm">Date</div>
+                        <div class="col-sm">Semester</div>
+                        <div class="col-sm"></div>
+                    </div>
+                    {% for course in courses %}
+                        <div class="row" style="font-weight:400">
+                        
+                            <div class='mt-2' style=" height:1px;background-color:lightgray"></div>
+                            <div class="col pt-2">{{course.course_id}}</div>
+                            <div class="col pt-2">{{course.course_name}}</div>
+                            <div class="col pt-2">{{course.course_desc}}</div>
+                            <div class="col pt-2">{{course.course_date}}</div>
+                            <div class="col pt-2">{{course.course_term}}</div>
+                            <div class="col pt-2 d-flex justify-content-end">
+                                <!-- <form action='/courses/{{course.course_id}}/details' method="GET">
+                                    <button  style='border:none;background-color:aqua;color:white;' class="mx-2 rounded" type="submit">Details</button>
+                                </form> -->
+                                <!-- <form action='/courses/{{course.course_id}}/update' method="GET">
+                                    <button style=' border:none;color:white;'  class=" bg-warning mx-2 rounded"type="submit">Edit</button>
+                                </form>
+                                <form action='/courses/{{course.course_id}}/delete' method="POST">
+                                    <button style='border:none;color:white;' class="mx-2 rounded bg-danger" type="submit">Delete</button>
+                                </form> -->
+                                
+                                
+                                
+                                
+                            </div>
+                        
+                        </div>
+                    {% endfor %}
+                    
+                        
+                    
+                </div>
+            </div>
+        </div>
+    </div> 
+</div>
+    {% endblock %}  
+   
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+</body>
+</html>

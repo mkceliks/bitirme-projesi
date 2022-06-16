@@ -1,0 +1,156 @@
+{% extends 'design.html' %}
+{% block head %}
+    <script>
+        function newform() {
+            document.getElementById("newform").style.display = 'block';
+      }
+      function off() {
+        document.getElementById("newform").style.display = 'none';
+      }
+      function details(){
+        let value
+        document.getElementById("newform").style.display = 'block';
+      }
+    </script>
+        <script>
+            function onlyOne(checkbox) {
+
+                var close = document.getElementById('select')
+                if ( checkbox.value == 'Researcher' ){
+                  close.style.display = 'none';
+                }
+                else{
+                  close.style.display = 'block';
+                }
+            }
+                  </script>
+    <title>Users</title>
+{% endblock %}
+<body>
+    {% block body %}
+    <div class='ps-3 pt-3'style=" margin-left:10%;">
+        <div style="font-size:36px; font-weight:150;color:#5e5e5e;">Index</div>
+        <div style='font-size:20px;font-weight:600 ;padding-bottom:10px'>Users</div>
+    </div>
+    <div style="margin-left:10%; height:1px;background-color:lightgray"></div>
+    <div class='pt-2' style='margin-left:10%;height:100%; background-color:#f1f1f3'>
+       <div style='height:100%' class="d-flex justify-content-center p-3 ">
+        <div class="d-flex flex-column " style="height:100%; width:100%;  background-color:white">
+            <div class="d-flex justify-content-between p-2">
+                <div style="font-weight:600" class="align-self-center">
+                    List of Users
+                </div>
+                <!-- <div>
+                    <button  onClick="newform()" class="new align-self-center rounded" id="newbutton">Create New</button>
+                </div>     -->
+            </div>
+            <div style=" height:2px;background-color:#f1f1f3"></div>
+            <div id='newform' style='display:none'>
+                <div style="font-size:36px; font-weight:150;color:#5e5e5e;" class="text-center">New User</div>
+                <div>
+                    <form class="d-flex justify-content-center flex-column align-items-center" action='/users' method="POST">
+                        <div>
+                            <div>
+                                <div class="input-group mb-3 p-2">
+                                    <span style='background-color:#1f8772;width:120px;; color:white' class="input-group-text" id="inputGroup-sizing-default">Name</span>
+                                    <input name='user_name' type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                                </div>
+                            </div>
+                            <div>
+                                <div class="input-group mb-3 p-2">
+                                    <span style='background-color:#1f8772;width:120px;; color:white' class="input-group-text" id="inputGroup-sizing-default">Surname</span>
+                                    <input name='user_surname'type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                                </div>
+                            </div>
+                            <div id="select">
+                                <div  class="input-group mb-3 p-2">
+                                    <span style='background-color:#1f8772; width:120px;; color:white' class="input-group-text" id="inputGroup-sizing-default">Number</span>
+                                    <input  name='user_number' type="number" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                                </div>
+                            </div>
+                            <div>
+                                <div class="input-group mb-3 p-2">
+                                    <span style='background-color:#1f8772; width:120px; color:white' class="input-group-text" id="inputGroup-sizing-default">Mail</span>
+                                    <input  name='user_email' type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                                </div>
+                            </div> 
+                            <div>
+                                <div class="input-group mb-3 p-2">
+                                    <span style='background-color:#1f8772; width:120px; color:white' class="input-group-text" id="inputGroup-sizing-default">Password</span>
+                                    <input  name='user_password' type="password" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                                </div>
+                            </div> 
+                                <div class="input-group mb-3 p-2">
+                                <select class="form-select w-75 mb-3 p-2" name="user_role"  onclick="onlyOne(this)">
+                                <option selected disabled>Select New Role</option>
+                                {% for role in roles %}
+                                <option value="{{role.role_name}}">{{role.role_name}}</option>
+                                {% endfor %}
+                                </select>
+                            </div>
+                                     
+                        </div>
+                        
+                        <div class="px-2 d-flex justify-content-center align-items-center">
+                            <button style='height:38px' type="submit" class="new rounded ">Create</button>
+                        </div>
+                    </form>
+                    <div class='d-flex justify-content-center align-items-center'>
+
+                            <div class="px-2 pt-2 ">
+                                <button  onclick='off()' style='background-color:red' class="new rounded" >Close</button>
+                            </div> 
+                        
+                       
+                    </div>
+                    
+                </div>
+            </div>
+            <div class="d-flex flex-column p-3">
+                <div class='mt-2' style=" height:1px;background-color:lightgray"></div>
+                <div class="container" >
+                    <div class="row" style="font-weight:600">
+                        <div class="col-2">User Email</div>
+                        <div class="col-2">Student No</div>
+                        <div class="col-3">Student Name</div>
+                        <div class="col-2">Student Role</div>
+                    </div>
+                    {% for user in users %}
+                        <div class="row" style="font-weight:600">
+                        
+                            <div class='mt-2' style=" height:1px;background-color:lightgray"></div>
+                            <div class="col-2 pt-2">{{user.user_email}}</div>   
+                            <div class="col-2 pt-2">{{user.user_number}}</div>
+                            <div class="col-3 pt-2">{{user.user_name}} {{user.user_surname}}</div> 
+                            <div style="width: 10%;overflow: hidden; white-space: nowrap;text-overflow: ellipsis;" class="col-2 pt-2">{{user.user_role}}</div> 
+                           
+                            <div class="col-3 pt-2 d-flex justify-content-end">
+                                <form action='/users/{{user.user_number}}/details' method="GET">
+                                    <button  style='border:none;background-color:aqua;color:white;' class="mx-2 rounded" type="submit">Details</button>
+                                </form>
+                                <!-- <form action='/users/{{user.user_number}}/update' method="GET">
+                                    <button style=' border:none;color:white;'  class=" bg-warning mx-2 rounded"type="submit">Edit</button>
+                                </form>
+                                <form action='/users/{{user.user_number}}/delete' method="POST">
+                                    <button style='border:none;color:white;' class="mx-2 rounded bg-danger" type="submit">Delete</button>
+                                </form> -->
+            
+                            </div>
+                        
+                        </div>
+                        <div id="{{user.user_number}}" style="display:none;">sa</div>
+                    {% endfor %}
+                    
+                        
+                    
+                </div>
+            </div>
+        </div>
+    </div> 
+</div>
+    {% endblock %}  
+   
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+</body>
+</html>
