@@ -570,37 +570,36 @@ def exam_evaluate_questions(exam_id):
         for i in range(len(questions)+1):
             if questions[i].question == name:
                     var = i
-                    break
-        print(var)
+                    break 
+        
         all_users = []
         for user2 in User.objects(user_exam=exam_id):
             all_users.append(user2)
         return render_template("exam_evaluate_questions.html",questions=questions,exam=exam,all_users=all_users,name=name,all_answers=all_answers,var=var)
 
-# @app.route('/exams/<exam_id>/score' , methods=["GET"])
-# @login_required_exams
-# def exam_score(exam_id):
-#     if request.method == "GET":
-#         exam = Exam.objects(exam_id = exam_id).first()
-#         all_answers = []
-#         for user in User.objects(user_exam =exam_id):
-#             all_answers.append(user.ml_fall)
-#         exam_name = exam.exam_name
-#         questions=[]
-#         for question in Question.objects(exam=exam_name):
-#             questions.append(question)
-#         content = request.form
-#         name = content['count']
-#         var = 0
-#         for i in range(len(questions)+1):
-#             if questions[i].question == name:
-#                     var = i
-#                     break
-#         print(var)
-#         all_users = []
-#         for user2 in User.objects(user_exam=exam_id):
-#             all_users.append(user2)
-#         return render_template("exam_evaluate_questions.html",questions=questions,exam=exam,all_users=all_users,name=name,all_answers=all_answers,var=var)    
+@app.route('/exams/<exam_id>/score' , methods=["GET"])
+@login_required_exams
+def exam_score(exam_id):
+    if request.method == "GET":
+        exam = Exam.objects(exam_id = exam_id).first()
+        all_answers = []
+        for user in User.objects(user_exam =exam_id):
+            all_answers.append(user.ml_fall)
+        exam_name = exam.exam_name
+        questions=[]
+        for question in Question.objects(exam=exam_name):
+            questions.append(question)
+        all_users = []
+        for user2 in User.objects(user_exam=exam_id):
+            all_users.append(user2)
+        score = []
+        for j in range (len(all_users)):
+            temp = 0
+            for i in range(len(questions)):
+                if questions[i].answer == all_answers[j][i] or questions[i].alternative_answer1 == all_answers[j][i] or questions[i].alternative_answer2 == all_answers[j][i]:
+                    temp = temp + questions[i].question_score
+            score.append(temp)
+        return render_template("exam_score.html",questions=questions,exam=exam,all_users=all_users,all_answers=all_answers,score =score)    
 
 
 ####################################################################

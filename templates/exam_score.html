@@ -49,12 +49,10 @@
 <body>
     {% block body %}
     <div class='ps-3 pt-3' style=" margin-left:10%;">
-        <div style="font-size:36px; font-weight:150;color:#5e5e5e;">Index</div>
-        <div style='font-size:20px;font-weight:600 ;padding-bottom:10px'>Questions</div>
+        <div style="font-size:36px; font-weight:150;color:#5e5e5e;"> The Lesson Of -> {{exam.exam_name}}</div>
     </div>
-    <div style="margin-left:10%; height:1px;background-color:lightgray"></div>
 
-
+            <h2 style="text-align: center;">GENERAL SCORES OF STUDENTS</h2>
             <div class="d-flex flex-column p-2 w-50" style="float:left;">
                 <div class="container">
                     <div class="row" style="font-weight:600">
@@ -78,13 +76,13 @@
                 <div class="d-flex flex-column p-2 w-50" style="float:right;">
                     <div class="container">
                         <div class="row" style="font-weight:600">
-                            <div style="text-align: center;" class="col-sm">Scores of</div>
+                            <div style="text-align: center;" class="col-sm">Scores</div>
                         </div>
-                        {% for answers in all_answers %}
+                        {% for scores in score %}
                         <div class="row" style="font-weight:400">
     
                             <div class='mt-2' style=" height:1px;background-color:lightgray"></div>
-                            <div style="text-align: center;" class="col pt-2">{{answers[var]}}</div>
+                            <div style="text-align: center;" class="col pt-2">{{scores}}</div>
                             </div>
                         {% endfor %}
                     </div>
