@@ -323,6 +323,7 @@ class User(db.Document):
     user_role = db.StringField()
     user_course = db.ListField(db.StringField())
     user_exam=db.ListField(db.StringField())
+    ml_fall = db.ListField(db.StringField())
     
     def to_json(self):
         return {
@@ -333,7 +334,8 @@ class User(db.Document):
                 "user_password" : self.user_password,
                 "user_role" : self.user_role,
                 "user_course" : self.user_course,
-                "user_exam": self.user_exam
+                "user_exam": self.user_exam,
+                "ml_fall": self.ml_fall
             }
     
 @app.route('/users',methods = ['GET','POST'])
@@ -472,7 +474,7 @@ def update_exam(exam_id):
         updated_exam.save()
         return redirect('/exams')
 
-@app.route('/exams/<exam_id>/details/adduser', methods=["GET","POST"])
+@app.route('/exams/<exam_id>/enroll/adduser', methods=["GET","POST"])
 @login_required_exams
 def adduser_exam(exam_id):
     if request.method == "GET":
@@ -488,7 +490,7 @@ def adduser_exam(exam_id):
         return redirect('/exams/{0}/details'.format(exam_id))
 
 
-@app.route('/exams/<exam_id>/<user_number>/details/deluser', methods=["POST"])
+@app.route('/exams/<exam_id>/<user_number>/enroll/deluser', methods=["POST"])
 @login_required_exams
 def deluser_exam(exam_id,user_number):
     if request.method == "POST":
@@ -516,10 +518,89 @@ def exam_questions(exam_id):
         for question in Question.objects(exam=exam_name):
             questions.append(question)
         return render_template("exam_questions.html",questions=questions)
-    
-    
 
-         
+@app.route('/exams/<exam_id>/evaluate' , methods=["GET"])
+@login_required_exams
+def exam_evaluate(exam_id):
+    if request.method == "GET":
+        exam = Exam.objects(exam_id = exam_id).first()
+        users = []
+        for user2 in User.objects(user_exam=exam_id):
+            users.append(user2)
+        exam_name = exam.exam_name
+        questions=[]
+        for question in Question.objects(exam=exam_name):
+            questions.append(question)
+        return render_template("exam_evaluate.html",questions=questions, users=users,exam=exam)
+    
+@app.route('/exams/<exam_id>/evaluate_students' , methods=["POST"])
+@login_required_exams
+def exam_evaluate_students(exam_id):
+    if request.method == "POST":
+        exam = Exam.objects(exam_id = exam_id).first()
+        content = request.form
+        users = User.objects(user_number = content['student_number']).first()
+        user_answers = []
+        for answers in users.ml_fall:
+            user_answers.append(answers)
+        exam_name = exam.exam_name
+        questions=[]
+        for question in Question.objects(exam=exam_name):
+            questions.append(question)
+        all_users = []
+        for user2 in User.objects(user_exam=exam_id):
+            all_users.append(user2)
+        return render_template("exam_evaluate_student.html",questions=questions, users=users,exam=exam,user_answers=user_answers,all_users=all_users)    
+
+@app.route('/exams/<exam_id>/evaluate_questions' , methods=["POST"])
+@login_required_exams
+def exam_evaluate_questions(exam_id):
+    if request.method == "POST":
+        exam = Exam.objects(exam_id = exam_id).first()
+        all_answers = []
+        for user in User.objects(user_exam =exam_id):
+            all_answers.append(user.ml_fall)
+        exam_name = exam.exam_name
+        questions=[]
+        for question in Question.objects(exam=exam_name):
+            questions.append(question)
+        content = request.form
+        name = content['count']
+        var = 0
+        for i in range(len(questions)+1):
+            if questions[i].question == name:
+                    var = i
+                    break
+        print(var)
+        all_users = []
+        for user2 in User.objects(user_exam=exam_id):
+            all_users.append(user2)
+        return render_template("exam_evaluate_questions.html",questions=questions,exam=exam,all_users=all_users,name=name,all_answers=all_answers,var=var)
+
+# @app.route('/exams/<exam_id>/score' , methods=["GET"])
+# @login_required_exams
+# def exam_score(exam_id):
+#     if request.method == "GET":
+#         exam = Exam.objects(exam_id = exam_id).first()
+#         all_answers = []
+#         for user in User.objects(user_exam =exam_id):
+#             all_answers.append(user.ml_fall)
+#         exam_name = exam.exam_name
+#         questions=[]
+#         for question in Question.objects(exam=exam_name):
+#             questions.append(question)
+#         content = request.form
+#         name = content['count']
+#         var = 0
+#         for i in range(len(questions)+1):
+#             if questions[i].question == name:
+#                     var = i
+#                     break
+#         print(var)
+#         all_users = []
+#         for user2 in User.objects(user_exam=exam_id):
+#             all_users.append(user2)
+#         return render_template("exam_evaluate_questions.html",questions=questions,exam=exam,all_users=all_users,name=name,all_answers=all_answers,var=var)    
 
 
 ####################################################################
@@ -637,6 +718,11 @@ def update_role(role_name):
         Roles.objects(role_name=content['role_name']).update_one(push__access=content['access_9'])
         Roles.objects(role_name=content['role_name']).update_one(push__access=content['access_10'])
         return redirect('/roles')
+
+
+####################################################################
+
+
 
 @login_manager.user_loader
 def load_user(user_id):

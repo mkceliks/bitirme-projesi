@@ -57,9 +57,6 @@ color:#828e96
                     <div style="font-weight:600" class="align-self-center">
                         List of Exams
                     </div>
-                    <form action='/exams/{{exam.exam_id}}/details/adduser' method="GET">
-                        <button  onClick="newform()" class="new align-self-center rounded" id="newbutton">Add User</button>
-                    </form> 
                 </div>
                 <div style=" height:2px;background-color:#f1f1f3"></div>
                 <div class="d-flex flex-column p-2">
@@ -74,7 +71,7 @@ color:#828e96
                                 <div class="col-4">{{user.user_email}}</div>
                                 <div class="col-4">{{user.user_name}} {{user.user_surname}}</div>
                                 <div class="col pt-2 d-flex justify-content-end">
-                                    <form action='/exams/{{exam.exam_id}}/{{user.user_number}}/details/deluser' method="POST">
+                                    <form action='/exams/{{exam.exam_id}}/{{user.user_number}}/enroll/deluser' method="POST">
                                         <button style='border:none;color:white;' class="mx-2 rounded bg-danger" type="submit">Remove</button>
                                     </form>
                                 </div>

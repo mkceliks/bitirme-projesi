@@ -84,7 +84,7 @@
                 <div style=" height:2px;background-color:#f1f1f3"></div>
                 <div style="font-size:36px; font-weight:150;color:#5e5e5e;" class="text-center">Add New User</div>
                 <div>
-                    <form class="d-flex justify-content-center flex-column align-items-center" action='/exams/{{exam.exam_id}}/details/adduser' method="POST">
+                    <form class="d-flex justify-content-center flex-column align-items-center" action='/exams/{{exam.exam_id}}/enroll/adduser' method="POST">
                         <div>
                             <div>
                                 <div class="input-group mb-3 p-2">
@@ -104,7 +104,7 @@
                     <div class='d-flex justify-content-center align-items-center'>
 
                         <div class="px-2 pt-2 ">
-                            <a href="/exams/{{exam.exam_id}}/details"><button  onclick='off()' style='background-color:red' class="new rounded" >Close</button></a>
+                            <a href="/exams" style='background-color:red' class="btn btn-danger">Close</a>
                         </div>
 
 

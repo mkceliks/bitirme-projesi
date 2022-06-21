@@ -89,50 +89,52 @@
                     <div class='mt-2' style=" height:1px;background-color:lightgray"></div>
                     <div class="container">
                         <div class="row" style="font-weight:600">
-                            <div class="col-sm">No</div>
-                            <div class="col-sm">Course</div>
-                            <div class="col-sm">Course Name</div>
-                            <div class="col-sm">Semester</div>
-                            <div class="col-sm">DateTime</div>
-                            <div class="col-sm">Manage</div>
+                            <div class="col-md-1">No</div>
+                            <div class="col-md-2">Course</div>
+                            <div class="col-md-2">Course Name</div>
+                            <div class="col-md-1">Semester</div>
+                            <div class="col-md-2">DateTime</div>
+                            <div class="col-md-4" style="text-align: center;">Manage</div>
                         </div>
                         {% set count = namespace(value=1) %} {% for exam in exams %}
                         <div class="row" style="font-weight:400">
 
                             <div class='mt-2' style=" height:1px;background-color:lightgray"></div>
-                            <div class="col pt-2">{{count.value}}</div>
-                            <div class="col pt-2">{{exam.exam_course}}</div>
-                            <div class="col pt-2">{{exam.exam_name}}</div>
-                            <div class="col pt-2">{{exam.exam_semester}}</div>
-                            <div class="col pt-2">{{exam.exam_time}}</div>
+                            <div class="col-md-1 pt-2">{{count.value}}</div>
+                            <div class="col-md-2 pt-2">{{exam.exam_course}}</div>
+                            <div class="col-md-2 pt-2">{{exam.exam_name}}</div>
+                            <div class="col-md-1 pt-2">{{exam.exam_semester}}</div>
+                            <div class="col-md-2 pt-2">{{exam.exam_time}}</div>
 
-                            <div class="col pt-2 d-flex justify-content-end">
+                            <div class="col-md-4 pt-2 d-flex justify-content-end">
+
+                                                                
                                 <form action='/exams/{{exam.exam_id}}/details' method="GET">
-                                    <button style='border:none;background-color:aqua;color:white;' class="mx-1 rounded bg-success" type="submit">Enroll</button>
+                                    <button style='border:none;background-color:aqua;color:white;' class="mx-1 rounded" type="submit">Details</button>
                                 </form>
-                                <form  action='/exams/{{exam.exam_id}}/questions' method="GET">
-                                    <button style=' border:none;color:white;' class="mx-1 rounded bg-secondary" type="submit">Questions</button>
-                                    
-                                </form>
+
                                 <form action='/exams/{{exam.exam_id}}/update' method="GET">
                                     <button style=' border:none;color:white;' class=" bg-warning mx-1 rounded" type="submit">Edit</button>
                                 </form>
                                 <form action='/exams/{{exam.exam_id}}/delete' method="POST">
                                     <button style='border:none;color:white;' class="mx-1 rounded bg-danger" type="submit">Delete</button>
                                 </form>
+                                <form  action='/exams/{{exam.exam_id}}/questions' method="GET">
+                                    <button style=' border:none;color:white;' class="mx-1 rounded bg-secondary" type="submit">Questions</button>
+                                    
+                                </form>
+                                <form action='/exams/{{exam.exam_id}}/enroll/adduser' method="GET">
+                                    <button style='border:none;background-color:aqua;color:white;' class="mx-1 rounded bg-success" type="submit">Enroll</button>
+                                </form>
+
+                                <form action='/exams/{{exam.exam_id}}/evaluate' method="GET">
+                                    <button style='border:none;background-color:aqua;color:white;' class="mx-1 rounded bg-primary" type="submit">Evaluate</button>
+                                </form>
+
+                                <form action='/exams/{{exam.exam_id}}/enroll/adduser' method="GET">
+                                    <button style='border:none;background-color:aqua;color:white;' class="mx-1 rounded bg-secondary" type="submit">Score</button>
+                                </form>
                              
-                                <!-- <form action='/exams/{{exam.exam_id}}/delete' method="POST">
-                                    <button style='border:none;color:white;' class="mx-1 rounded bg-success" type="submit">Enroll</button>
-                                </form>
-                                <form action='/exams/{{exam.exam_id}}/delete' method="POST">
-                                    <button style='border:none;color:white;' class="mx-1 rounded bg-primary" type="submit">Evaluate</button>
-                                </form>
-                                <form action='/exams/{{exam.exam_id}}/delete' method="POST">
-                                    <button style='border:none;color:white;' class="mx-1 rounded bg-secondary" type="submit">Score</button>
-                                </form> -->
-
-
-
 
 
                             </div>
